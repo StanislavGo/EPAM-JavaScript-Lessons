@@ -2,17 +2,71 @@ const path = require('path');
 const { JSDOM, VirtualConsole } = require('jsdom');
 
 const { readTextFile } = require('../test-utils/readTextFile');
-const { addFileProtocolToElements } = require('../test-utils/addFileProtocolToElements');
 
-const {
-    getFullDaysBeforeNewYear,
-    formatWithWeekday,
-    isValidDate,
-    isAfter,
-    formatDistanceToNow,
-} = require('./script');
+// isValidName
+let isValid = null;
+let isValidNameModule = null;
+try {
+    isValidNameModule = require('./isValidName');
+    isValid = isValidNameModule.default;
+} catch (error) { }
 
-describe('JavaScript Date and methods', () => {
+// GREETING constant
+let GREETING_Module = null;
+let GREETING = null;
+try {
+    GREETING_Module = require('./constants/GREETING');
+    GREETING = GREETING_Module.GREETING;
+} catch (error) { }
+
+// sayHelloToUser function
+let sayHelloToUser = null;
+try {
+    const sayHelloToUserModule = require('./script');
+    sayHelloToUser = sayHelloToUserModule.default;
+} catch (error) { }
+
+// GREETING constant
+let CURRENCY_SYMBOLS_Module = null;
+let CURRENCY_SYMBOLS = null;
+try {
+    CURRENCY_SYMBOLS_Module = require('./constants/CURRENCY_SYMBOLS');
+    CURRENCY_SYMBOLS = CURRENCY_SYMBOLS_Module.CURRENCY_SYMBOLS;
+} catch (error) { }
+
+// formatWithCurrency
+let formatWithCurrency = null;
+let formatWithCurrencyModule = null;
+try {
+    formatWithCurrencyModule = require('./formatWithCurrency');
+    formatWithCurrency = formatWithCurrencyModule.formatWithCurrency;
+} catch (error) { }
+
+// formatPrices
+let formatPrices = null;
+let formatPricesModule = null;
+try {
+    formatPricesModule = require('./formatPrices');
+    formatPrices = formatPricesModule.formatPrices;
+} catch (error) { }
+
+// Task
+let Task = null;
+let TaskModule = null;
+try {
+    TaskModule = require('./user-data/Task');
+    Task = TaskModule.Task;
+} catch (error) { }
+
+// User
+let User = null;
+let UserModule = null;
+try {
+    UserModule = require('./user-data/User');
+    User = UserModule.User;
+} catch (error) { }
+
+describe('JS Classes and Modules', () => {
     let htmlString;
 
     let dom;
@@ -37,229 +91,303 @@ describe('JavaScript Date and methods', () => {
             virtualConsole,
         });
         document = dom.window.document;
-
-        // Replace CSS href with absolute paths
-        const linkElements = document.querySelectorAll('link[rel="stylesheet"]');
-        addFileProtocolToElements(linkElements, 'href', __dirname);
     });
 
-    describe('getFullDaysBeforeNewYear', () => {
-        it('should return 4 days for 28th of December', () => {
-            expect(getFullDaysBeforeNewYear(28, 12)).toBe(4);
+    describe('JS Modules', () => {
+        describe('isValidName.js', () => {
+            it('should create isValidName.js file', () => {
+                expect(isValidNameModule).not.toBeNull();
+            });
+
+            it('should return true/false', () => {
+                expect(isValid('SomeName')).toBe(true);
+                expect(isValid(null)).toBe(false);
+            });
         });
 
-        it('should return 1 day for 31st of December', () => {
-            expect(getFullDaysBeforeNewYear(31, 12)).toBe(1);
+        describe('GREETING.js', () => {
+            it('should create GREETING.js file', () => {
+                expect(GREETING_Module).not.toBeNull();
+            });
+
+            it('should export GREETING constant', () => {
+                expect(GREETING).toBe('Hello');
+            });
         });
 
-        it('should return null for no parameters', () => {
-            expect(getFullDaysBeforeNewYear()).toBe(null);
+        describe('sayHelloToUser function', () => {
+            it('should return a user greeting', () => {
+                expect(sayHelloToUser('Bob')).toBe('Hello, Bob!');
+                expect(sayHelloToUser('')).toBe('Invalid name');
+            });
         });
 
-        it('should return null for zeros', () => {
-            expect(getFullDaysBeforeNewYear(0, 0)).toBe(null);
-        });
+        describe('formatPrices', () => {
+            describe('CURRENCY_SYMBOLS.js', () => {
+                it('should create CURRENCY_SYMBOLS.js file', () => {
+                    expect(CURRENCY_SYMBOLS_Module).not.toBeNull();
+                });
 
-        it('should return null for negative date', () => {
-            expect(getFullDaysBeforeNewYear(-7, 1)).toBe(null);
-        });
+                it('should export CURRENCY_SYMBOLS constant', () => {
+                    expect(CURRENCY_SYMBOLS).toStrictEqual({
+                        US: '$',
+                        EUR: '€',
+                        JPN: '¥',
+                    });
+                });
+            });
 
-        it('should return null for negative month', () => {
-            expect(getFullDaysBeforeNewYear(1, -7)).toBe(null);
-        });
+            describe('formatWithCurrency.js', () => {
+                it('should create formatWithCurrency.js file', () => {
+                    expect(formatWithCurrencyModule).not.toBeNull();
+                });
 
-        it('should return null for Infinity date', () => {
-            expect(getFullDaysBeforeNewYear(Infinity, 1)).toBe(null);
-        });
+                it('should format number with currency', () => {
+                    expect(formatWithCurrency(5, '¥')).toBe(`5.00¥`);
+                });
+            });
 
-        it('should return null for Infinity month', () => {
-            expect(getFullDaysBeforeNewYear(1, Infinity)).toBe(null);
-        });
+            describe('formatPrices function', () => {
+                it('should create formatPrices.js file', () => {
+                    expect(formatPricesModule).not.toBeNull();
+                });
 
-        it('should return null for -Infinity date', () => {
-            expect(getFullDaysBeforeNewYear(-Infinity, 1)).toBe(null);
-        });
+                it('should format prices', () => {
+                    const prices = [10, 20, 44];
+                    const expectedResult = ['10.00€', '20.00€', '44.00€']
 
-        it('should return null for -Infinity month', () => {
-            expect(getFullDaysBeforeNewYear(1, -Infinity)).toBe(null);
-        });
-
-        it('should return null for NaN date', () => {
-            expect(getFullDaysBeforeNewYear(NaN, 7)).toBe(null);
-        });
-
-        it('should return null for NaN month', () => {
-            expect(getFullDaysBeforeNewYear(NaN, 7)).toBe(null);
-        });
-    });
-
-    describe('formatWithWeekday', () => {
-        it('should return formatted date for Monday', () => {
-            const date = new Date(2021, 10, 15);
-
-            expect(formatWithWeekday(date))
-                .toBe('Monday, 15, November 2021')
-        });
-
-        it('should return formatted date for Tuesday', () => {
-            const date = new Date(2021, 6, 20);
-
-            expect(formatWithWeekday(date))
-                .toBe('Tuesday, 20, July 2021')
-        });
-
-        it('should return formatted date for Wednesday', () => {
-            const date = new Date(2018, 3, 11);
-
-            expect(formatWithWeekday(date))
-                .toBe('Wednesday, 11, April 2018')
-        });
-
-        it('should return formatted date for Thursday', () => {
-            const date = new Date(2016, 0, 28);
-
-            expect(formatWithWeekday(date))
-                .toBe('Thursday, 28, January 2016')
-        });
-
-        it('should return formatted date for Friday', () => {
-            const date = new Date(2013, 5, 28);
-
-            expect(formatWithWeekday(date))
-                .toBe('Friday, 28, June 2013')
-        });
-
-        it('should return formatted date for Saturday', () => {
-            const date = new Date(2011, 1, 5);
-
-            expect(formatWithWeekday(date))
-                .toBe('Saturday, 5, February 2011')
-        });
-
-        it('should return formatted date for Sunday', () => {
-            const date = new Date(2010, 4, 16);
-
-            expect(formatWithWeekday(date))
-                .toBe('Sunday, 16, May 2010');
-        });
-
-        it('should return an empty string for null', () => {
-            expect(formatWithWeekday(null))
-                .toBe('');
-        });
-
-        it('should return an empty string for undefined', () => {
-            expect(formatWithWeekday())
-                .toBe('');
+                    expect(formatPrices(prices, 'EUR'))
+                        .toStrictEqual(expectedResult);
+                });
+            });
         });
     });
 
-    describe('isValidDate', () => {
-        it('should be valid', () => {
-            expect(isValidDate(new Date())).toBe(true);
+    describe('JS Classes', () => {
+        describe('Task.js', () => {
+            let name;
+            let task;
+
+            beforeEach(() => {
+                name = 'Task Name';
+                task = new Task(name);
+            });
+
+            it('should create Task.js file', () => {
+                expect(TaskModule).not.toBeNull();
+            });
+
+            it('should add name property in constructor', () => {
+                expect(task.name).toBe(name);
+            });
+
+            it('should set an empty string to a description property by default', () => {
+                expect(task.description).toBe('');
+            });
+
+            it('should have getter', () => {
+                const propertyDescriptor = Object
+                    .getOwnPropertyDescriptor(Task.prototype, 'description');
+
+                expect(propertyDescriptor.get instanceof Function).toBe(true);
+            });
+
+            it('should have setter', () => {
+                const propertyDescriptor = Object
+                    .getOwnPropertyDescriptor(Task.prototype, 'description');
+
+                expect(propertyDescriptor.set instanceof Function).toBe(true);
+            });
+
+            it('should set string value to description', () => {
+                const newDescription = 'newDescription';
+                task.description = newDescription;
+
+                expect(task.description).toBe(newDescription);
+            });
+
+            it('should set nothing to description when not string value', () => {
+                const newDescription = 'newDescription';
+                task.description = newDescription;
+
+                task.description = 777;
+
+                expect(task.description).toBe(newDescription);
+            });
         });
 
-        it('should be invalid for invalid date', () => {
-            expect(isValidDate(new Date(undefined))).toBe(false);
-        });
+        describe('User.js', () => {
+            let firstName;
+            let lastName;
 
-        it('should be invalid for null', () => {
-            expect(isValidDate(null)).toBe(false);
-        });
+            let user;
 
-        it('should be invalid for undefined', () => {
-            expect(isValidDate(undefined)).toBe(false);
-        });
+            beforeEach(() => {
+                firstName = 'My firstName';
+                lastName = 'My lastName';
 
-        it('should be invalid for an empty object', () => {
-            expect(isValidDate({})).toBe(false);
-        });
+                user = new User(firstName, lastName)
+            });
 
-        it('should be invalid for a number', () => {
-            expect(isValidDate(3333)).toBe(false);
-        });
+            it('should create User.js file', () => {
+                expect(UserModule).not.toBeNull();
+            });
 
-        it('should be invalid for an empty string', () => {
-            expect(isValidDate('')).toBe(false);
-        });
+            describe('constructor', () => {
+                it('should add firstName in constructor', () => {
+                    expect(user.firstName).toBe(firstName);
+                });
 
-        it('should be invalid for an empty array', () => {
-            expect(isValidDate([])).toBe(false);
+                it('should add lastName in constructor', () => {
+                    expect(user.lastName).toBe(lastName);
+                });
+
+                it('should set default value for an age property', () => {
+                    expect(user.age).toBe(1);
+                });
+
+                it('should set default value for a tasks property', () => {
+                    expect(user.tasks).toStrictEqual([]);
+                });
+            });
+
+            describe('fullName getter', () => {
+                it('should have getter', () => {
+                    const propertyDescriptor = Object
+                        .getOwnPropertyDescriptor(User.prototype, 'fullName');
+
+                    expect(propertyDescriptor.get instanceof Function).toBe(true);
+                });
+
+                it('should return a full name of a user', () => {
+                    expect(user.fullName).toBe(`${user.firstName} ${user.lastName}`);
+                });
+            });
+
+            describe('setAge method', () => {
+                it('should not set NaN as an age', () => {
+                    user.setAge(NaN);
+
+                    expect(user.age).toBe(1);
+                });
+
+                it('should not set Infinity as an age', () => {
+                    user.setAge(Infinity);
+
+                    expect(user.age).toBe(1);
+                });
+
+                it('should not set -Infinity as an age', () => {
+                    user.setAge(Infinity);
+
+                    expect(user.age).toBe(1);
+                });
+
+                it('should not set a negative number as an age', () => {
+                    user.setAge(-100);
+
+                    expect(user.age).toBe(1);
+                });
+
+                it('should set a positive number as an age', () => {
+                    user.setAge(77);
+
+                    expect(user.age).toBe(77);
+                });
+            });
+
+            describe('addTasks method', () => {
+                let tasks1;
+                let tasks2;
+
+                beforeEach(() => {
+                    tasks1 = [
+                        new Task('Task1'),
+                        new Task('Task2'),
+                        new Task('Task3'),
+                    ];
+
+                    tasks2 = [
+                        new Task('Task4'),
+                        new Task('Task5'),
+                    ];
+                });
+
+                it('should add tasks when they are empty', () => {
+                    const expectedResult = [
+                        new Task('Task1'),
+                        new Task('Task2'),
+                        new Task('Task3'),
+                    ];
+                    
+                    user.addTasks(tasks1);
+                    
+                    expect(user.tasks).toStrictEqual(expectedResult);
+                });
+
+                it('should add tasks when there are some already', () => {
+                    user.addTasks(tasks2);
+                    user.addTasks(tasks1);
+                    
+                    const expectedResult = [
+                        new Task('Task4'),
+                        new Task('Task5'),
+                        new Task('Task1'),
+                        new Task('Task2'),
+                        new Task('Task3'),
+                    ];
+                    
+                    expect(user.tasks).toStrictEqual(expectedResult);
+                });
+
+                it('should not add task if it is not Task instance', () => {
+                    const expectedResult = [
+                    ];
+                    
+                    user.addTasks([new User('', '')]);
+
+                    expect(user.tasks).toStrictEqual(expectedResult);
+                });
+
+                it('should add to tasks only instances of Task', () => {
+                    const expectedResult = [
+                        new Task('Task1'),
+                        new Task('Task2'),
+                        new Task('Task3'),
+                        new Task('Task4'),
+                        new Task('Task5'),
+                    ];
+                    
+                    const tasks = [...tasks1, new Error, [], ...tasks2];
+
+                    user.addTasks(tasks);
+
+                    expect(user.tasks).toStrictEqual(expectedResult);
+                });
+            });
+
+            describe('getTasksCount method', () => {
+                let tasks;
+
+                beforeEach(() => {
+                    tasks = [
+                        new Task('Task1'),
+                        new Task('Task2'),
+                        new Task('Task3'),
+                    ];
+                });
+
+                it('should return 0 by default', () => {
+                    expect(user.getTasksCount()).toBe(0);
+                });
+
+                it('should return tasks count', () => {
+                    user.addTasks(tasks);
+
+                    expect(user.getTasksCount()).toBe(3);
+                });
+            });
         });
     });
 
-    describe('isAfter', () => {
-        let date1;
-        let date2;
-
-        beforeEach(() => {
-            date1 = new Date(2022, 22, 10);
-            date2 = new Date(2022, 23, 10);
-        });
-
-        it('should mark date as after', () => {
-            expect(isAfter(date2, date1)).toBe(true);
-        });
-
-        it('should mark date as before', () => {
-            expect(isAfter(date1, date2)).toBe(false);
-        });
-
-        it('should return false when invalid date', () => {
-            expect(isAfter(date1, new Date(undefined))).toBe(false);
-        });
-
-        it('should return false when invalid date to compare', () => {
-            expect(isAfter(new Date(undefined), date1)).toBe(false);
-        });
-    });
-
-    describe('formatDistanceToNow', () => {
-        it('should format to "less than a minute"', () => {
-            const date = new Date(new Date() - 29 * 1000);
-
-            expect(formatDistanceToNow(date))
-                .toBe('less than a minute');
-        });
-
-        it('should format to "1 minute"', () => {
-            const date = new Date(new Date() - 89 * 1000);
-
-            expect(formatDistanceToNow(date))
-                .toBe('1 minute');
-        });
-
-        it('should format to "34 minutes"', () => {
-            const date = new Date(new Date() -  43.3 * 60 * 1000);
-
-            expect(formatDistanceToNow(date))
-                .toBe('43 minutes');
-        });
-
-        it('should format to "about 1 hour"', () => {
-            const date = new Date(new Date() -  89 * 60 * 1000);
-
-            expect(formatDistanceToNow(date))
-                .toBe('about 1 hour');
-        });
-
-        it('should format to date', () => {
-            const date = new Date(2012, 6, 22, 8, 7, 6);
-
-            expect(formatDistanceToNow(date))
-                .toBe('22.07.2012 08:07:06');
-        });
-
-        it('should return "Date is unknown" when null', () => {
-            const date = null;
-
-            expect(formatDistanceToNow(date))
-                .toBe('Date is unknown');
-        });
-
-        it('should return "Date is unknown" when undefefined', () => {
-            expect(formatDistanceToNow())
-                .toBe('Date is unknown');
-        });
-    });
 });

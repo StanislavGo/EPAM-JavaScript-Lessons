@@ -17,61 +17,45 @@
     </section>
 
     <script type="module">
-        import {
-            getFullDaysBeforeNewYear,
-            formatWithWeekday,
-            isValidDate,
-            isAfter,
-            formatDistanceToNow,
-        } from './script.js';
+        import sayHelloToUser from './script.js'
+        import { formatPrices } from './formatPrices.js';
+        import { User } from './user-data/User.js';
+        import { Task } from './user-data/Task.js';
 
-        // getFullDaysBeforeNewYear
-        console.log('getFullDaysBeforeNewYear(30, 12): ', getFullDaysBeforeNewYear(30, 12));
-        console.log('getFullDaysBeforeNewYear(31, 12): ', getFullDaysBeforeNewYear(31, 12));
-        console.log('getFullDaysBeforeNewYear(28, 12): ', getFullDaysBeforeNewYear(28, 12));
-        console.log('getFullDaysBeforeNewYear(): ', getFullDaysBeforeNewYear());
-        console.log('getFullDaysBeforeNewYear(0, 0): ', getFullDaysBeforeNewYear(0, 0));
-        console.log('getFullDaysBeforeNewYear(-7, 1): ', getFullDaysBeforeNewYear(-7, 1));
-        console.log('getFullDaysBeforeNewYear(NaN, 1): ', getFullDaysBeforeNewYear(NaN, 1));
-        console.log('getFullDaysBeforeNewYear(Infinity, 1): ', getFullDaysBeforeNewYear(Infinity, 1));
+        console.clear();
 
-        // formatWithWeekday
-        console.log('formatWithWeekday(new Date(21, 10, 2022)): ', formatWithWeekday(new Date(21, 10, 2022)));
-        console.log('formatWithWeekday(new Date(22, 10, 2022)): ', formatWithWeekday(new Date(22, 10, 2022)));
-        console.log('formatWithWeekday(null): ', formatWithWeekday(null));
-        console.log('formatWithWeekday(undefined): ', formatWithWeekday(undefined));
-        console.log('formatWithWeekday(): ', formatWithWeekday());
+        // Modules
+        console.log('sayHelloToUser(\'Stan\'): ', sayHelloToUser('Stan'));
+        console.log('sayHelloToUser(\'\'): ', sayHelloToUser(''));
 
-        // isValidDate
-        let date = new Date(2022, 28, 10);
-        let invalidDate = new Date(undefined);
-        console.log('isValidDate(date): ', isValidDate(date)); // true
-        console.log('isValidDate(invalidDate): ', isValidDate(invalidDate)); // false
-        console.log('isValidDate(null): ', isValidDate(null)); // false
-        console.log('isValidDate(undefined): ', isValidDate(undefined)); // false
-        console.log('isValidDate({}): ', isValidDate({})); // false
-        console.log('isValidDate(3333): ', isValidDate(3333)); // false
-        console.log('isValidDate(""): ', isValidDate('')); // false
-        console.log('isValidDate([]): ', isValidDate([])); // false
+        const prices = [10, 20, 30, 10.2323, 10000, 88];
+        console.log('formatPrices: ', formatPrices(prices, 'JPN'));
+        console.log('formatPrices: ', formatPrices(prices));
 
-        // isAfter
-        let date1 = new Date(2022, 22, 10);
-        let date2 = new Date(2022, 23, 10);
+        // Classes
+        let newUser = new User('Stan', 'Jackman');
+        console.log('newUser fullName: ', newUser.fullName);
+        console.log('newUser default age: ', newUser.age);
+        newUser.setAge(NaN); // Should not work
+        newUser.setAge(-100); // Should not work
+        newUser.setAge(true); // Should not work
+        newUser.setAge(44); // Should work
+        console.log('newUser updated age: ', newUser.age);
 
-        console.log('isAfter(date1, date2): ', isAfter(date1, date2)); // false
-        console.log('isAfter(date2, date1): ', isAfter(date2, date1)); // true
-        console.log('isAfter(date1, new Date(undefined)): ', isAfter(date1, new Date(undefined))); // false
+        let tasks = [];
+        for (let i = 0; i < 10; i++) {
+            const newTask = new Task(`Task #${i}`);
+            newTask.description = `Task description #${i}`;
+            tasks.push(newTask);
+        }
 
-        // formatDistanceToNow
-        console.log('formatDistanceToNow(new Date(new Date() - 10)): ', formatDistanceToNow(new Date(new Date() - 10))); // 'less than a minute'
-        console.log('formatDistanceToNow(new Date(new Date() - 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 60 * 1000))); // '1 minute'
-        console.log('formatDistanceToNow(new Date(new Date() - 31 * 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 31 * 60 * 1000))); // '31 minutes'
-        console.log('formatDistanceToNow(new Date(new Date() - 77 * 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 77 * 60 * 1000))); // 'about 1 hour'
+        newUser.addTasks(tasks);
+        console.log('newUser.tasks: ', newUser.tasks);
 
-        console.log('formatDistanceToNow(new Date(2012, 6, 28, 9, 7, 32)): ', formatDistanceToNow(new Date(2012, 6, 28, 9, 7, 32))); // '28.07.2016 09:07:32'
+        newUser.addTasks([{}]); // Should Not Work;
+        console.log('newUser.tasks: ', newUser.tasks);
 
-        console.log('formatDistanceToNow(null)): ', formatDistanceToNow(null)); // 'Date is unknown'
-        console.log('formatDistanceToNow()): ', formatDistanceToNow()); // 'Date is unknown'
+        console.log('newUser.tasksCount: ', newUser.getTasksCount());
     </script>
 </body>
 
