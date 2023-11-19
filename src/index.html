@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <title>Basic HTML page</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section class="code-section">
+        <h1>Hello, world!</h1>
+
+        <p class="code-section__note">To see your JavaScript code output, please, open browser console by pressing F12.
+        </p>
+    </section>
+
+    <script src="script.js"></script>
+
+    <script>
+        // createUser
+        let user = createUser('Stan', 'Lee');
+        console.log('user: ', user);
+
+        // getFullName
+        console.log('getFullName(user): ', getFullName(user));
+        console.log('getFullName(): ', getFullName(user));
+
+        // getWidth
+        let params1 = {
+            styling: {
+                sizes: {
+                    width: '100px',
+                    height: '200px'
+                }
+            }
+        };
+
+        console.log('getWidth(params1): ', getWidth(params1));
+
+        let params2 = {};
+        let nullWidth1 = getWidth(params2);
+        console.log('getWidth(params2): ', nullWidth1);
+
+        let params3 = {
+            styling: {},
+        };
+        let nullWidth2 = getWidth(params3);
+        console.log('getWidth(params3): ', nullWidth2);
+
+        // extendObject
+        let obj = {
+            title: 'Simple Object',
+            isAdmin: false
+        };
+
+        let clonedObject = extendObject(obj, true);
+        console.log('extendObject(obj): ', clonedObject);
+
+        // sumPrices
+        let prices = {
+            apples: 1000,
+            oranges: 1600,
+            cucumbers: 1300,
+            month: 'December',
+            currency: 'USD',
+            health: Infinity,
+            isPayed: false
+        };
+
+        let result1 = sumPrices(prices);
+        console.log('sumPrices(prices)', result1);
+
+        let result2 = sumPrices({});
+        console.log('sumPrices({}): ', sumPrices({}));
+
+        // createUserWithFullName
+        let userWithFullName = createUserWithFullName('Stan', 'Lee');
+
+        console.log('userWithFullName.firstName: ', userWithFullName.firstName);
+        console.log('userWithFullName.lastName: ', userWithFullName.lastName);
+
+        let fullName1 = userWithFullName.getFullName();
+        console.log('fullName1: ', fullName1);
+
+        userWithFullName.setFirstName('Will');
+        userWithFullName.setLastName('Smith');
+
+        console.log('userWithFullName.firstName: ', userWithFullName.firstName);
+        console.log('userWithFullName.lastName: ', userWithFullName.lastName);
+
+        let fullName2 = userWithFullName.getFullName();
+        console.log('fullName2: ', fullName2);
+    </script>
+</body>
+
+</html>
