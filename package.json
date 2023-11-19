@@ -1,36 +1,29 @@
 {
-  "name": "object-type",
+  "name": "task-template",
   "version": "1.0.0",
   "description": "",
-  "main": "",
+  "main": "index.js",
   "scripts": {
-    "start": "cd ./src && live-server --port=7000",
+    "test:junit": "cross-env MOCHA_FILE=junit.xml mocha test --reporter mocha-junit-reporter",
+    "test:xunit": "cross-env MOCHA_FILE=xunit.xml mocha test --reporter mocha-xunit-reporter",
     "test": "npm run test:junit",
-    "test:local": "jest --reporters=default",
-    "test:watch": "jest --watchAll --reporters=default",
-    "test:junit": "jest --reporters=jest-junit",
-    "test:xunit": "jest",
-    "build": "echo \"Dummy build script\""
+    "build": "echo \"Dummy build script\"",
+    "test:dev": "mocha"
   },
-  "author": "EPAM",
+  "engines": {
+    "node": "<=14"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.19.6",
-    "@types/jsdom": "^16.2.14",
-    "babel-jest": "^29.2.1",
-    "hex-rgb": "^5.0.0",
-    "html-validate": "^6.10.0",
-    "jest": "^28.0.2",
-    "jest-xunit": "^1.0.11",
-    "jsdom": "^19.0.0",
-    "live-server": "^1.2.2"
-  },
   "dependencies": {
-    "jest-junit": "^13.2.0"
-  },
-  "jest-junit": {
-    "suiteName": "junit test results",
-    "outputDirectory": ".",
-    "outputName": "junit.xml"
+    "chai": "4.2.0",
+    "cross-env": "7.0.3",
+    "mocha": "10.0.0",
+    "mocha-junit-reporter": "1.23.3",
+    "mocha-xunit-reporter": "2.1.0"
   }
 }
