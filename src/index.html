@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <title>Basic HTML page</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>DOM element coordinates and dimensions</h1>
+
+    <p>To see your JavaScript code output, please, open browser console by pressing F12.
+    </p>
+
+    <div class="tasks-row">
+        <section class="code-section">
+            <h2>Function "isElementVisible"</h2>
+
+            <p class="element-for-testing visible-element">I am visible element</p>
+        </section>
+
+        <section class="code-section">
+            <h2>Function "isElementScrolled"</h2>
+
+            <p class="element-for-testing scrolled-element-horizontal">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint accusantium voluptatem veniam tempora.
+                Porro ipsum exercitationem magnam? Commodi modi sint itaque rem voluptates? Nulla architecto quaerat
+                sed, facilis optio fugit?
+            </p>
+
+            <p class="element-for-testing scrolled-element-vertical">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint accusantium voluptatem veniam tempora.
+                Porro ipsum exercitationem magnam? Commodi modi sint itaque rem voluptates? Nulla architecto quaerat
+                sed, facilis optio fugit?
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus, velit sint magnam fugit accusamus eos
+                natus quos distinctio? Optio atque nam quae exercitationem corrupti placeat reprehenderit tempore animi
+                voluptas cum?
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus, velit sint magnam fugit accusamus eos
+                natus quos distinctio? Optio atque nam quae exercitationem corrupti placeat reprehenderit tempore animi
+                voluptas cum?
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus, velit sint magnam fugit accusamus eos
+                natus quos distinctio? Optio atque nam quae exercitationem corrupti placeat reprehenderit tempore animi
+                voluptas cum?
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus, velit sint magnam fugit accusamus eos
+                natus quos distinctio? Optio atque nam quae exercitationem corrupti placeat reprehenderit tempore animi
+                voluptas cum?
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus, velit sint magnam fugit accusamus eos
+                natus quos distinctio? Optio atque nam quae exercitationem corrupti placeat reprehenderit tempore animi
+                voluptas cum?
+            </p>
+        </section>
+    </div>
+
+    <div>
+        <section class="code-section">
+            <h2>Function "createBlurredCoverElement"</h2>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Similique reprehenderit, ipsum cupiditate a
+                laboriosam incidunt hic itaque, dolorum temporibus molestias sed in dolor. Suscipit nesciunt nulla et
+                magni nam. Aliquam.</p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequatur, eligendi incidunt! Placeat
+            voluptatibus sint rem minus libero laborum, a, natus harum ut magni, aut asperiores earum sunt ipsum?
+            Aspernatur, molestias.
+
+            <div class="element-to-cover">ELEMENT TO COVER</div>
+        </section>
+    </div>
+
+    <script type="module">
+        console.clear();
+
+        import { isElementVisible } from './isElementVisible.js';
+
+        // isElementVisible
+        let visibleElement = document.querySelector('.visible-element');
+        let hiddenElement = document.createElement('p');
+        console.log('isElementVisible(visibleElement): ', isElementVisible(visibleElement));
+        console.log('isElementVisible(hiddenElement): ', isElementVisible(hiddenElement));
+        console.log('isElementVisible(null): ', isElementVisible(null));
+        console.log('isElementVisible(undefined): ', isElementVisible());
+    </script>
+
+    <script type="module">
+        import { isElementScrolled } from './isElementScrolled.js';
+
+        // isElementScrolled
+        let scrolledElementHorizontal = document.querySelector('.scrolled-element-horizontal');
+        scrolledElementHorizontal.scrollBy(274, 0);
+        let scrolledElementVertical = document.querySelector('.scrolled-element-vertical');
+        scrolledElementVertical.scrollBy(0, 308);
+
+        console.log('isElementScrolled(scrolledElementHorizontal): ', isElementScrolled(scrolledElementHorizontal));
+        console.log('isElementScrolled(scrolledElementVertical): ', isElementScrolled(scrolledElementVertical));
+        console.log('isElementScrolled(null): ', isElementScrolled(null));
+        console.log('isElementScrolled(null): ', isElementScrolled(null));
+        console.log('isElementScrolled(undefined): ', isElementScrolled());
+    </script>
+
+    <script type="module">
+        import { getPageData } from './getPageData.js';
+
+        // getPageData
+        console.log('getPageData(): ', getPageData());
+    </script>
+
+    <script type="module">
+        import { createToast } from './createToast.js';
+
+        let element = document.createElement('span');
+        element.textContent = 'I am toast.';
+
+        let toastElement = createToast(element);
+
+        document.body.append(toastElement);
+    </script>
+
+    <script type="module">
+        import { createBlurredCoverElement } from './createBlurredCoverElement.js';
+
+        let element = document.querySelector('.element-to-cover');
+        let coverElement = createBlurredCoverElement(element);
+
+        document.body.append(coverElement);
+    </script>
+</body>
+
+</html>
