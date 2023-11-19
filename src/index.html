@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <title>Basic HTML page</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section class="code-section">
+        <h1>Hello, world!</h1>
+
+        <p class="code-section__note">To see your JavaScript code output, please, open browser console by pressing F12.
+        </p>
+    </section>
+
+    <script type="module">
+        import {
+            getFullDaysBeforeNewYear,
+            formatWithWeekday,
+            isValidDate,
+            isAfter,
+            formatDistanceToNow,
+        } from './script.js';
+
+        // getFullDaysBeforeNewYear
+        console.log('getFullDaysBeforeNewYear(30, 12): ', getFullDaysBeforeNewYear(30, 12));
+        console.log('getFullDaysBeforeNewYear(31, 12): ', getFullDaysBeforeNewYear(31, 12));
+        console.log('getFullDaysBeforeNewYear(28, 12): ', getFullDaysBeforeNewYear(28, 12));
+        console.log('getFullDaysBeforeNewYear(): ', getFullDaysBeforeNewYear());
+        console.log('getFullDaysBeforeNewYear(0, 0): ', getFullDaysBeforeNewYear(0, 0));
+        console.log('getFullDaysBeforeNewYear(-7, 1): ', getFullDaysBeforeNewYear(-7, 1));
+        console.log('getFullDaysBeforeNewYear(NaN, 1): ', getFullDaysBeforeNewYear(NaN, 1));
+        console.log('getFullDaysBeforeNewYear(Infinity, 1): ', getFullDaysBeforeNewYear(Infinity, 1));
+
+        // formatWithWeekday
+        console.log('formatWithWeekday(new Date(21, 10, 2022)): ', formatWithWeekday(new Date(21, 10, 2022)));
+        console.log('formatWithWeekday(new Date(22, 10, 2022)): ', formatWithWeekday(new Date(22, 10, 2022)));
+        console.log('formatWithWeekday(null): ', formatWithWeekday(null));
+        console.log('formatWithWeekday(undefined): ', formatWithWeekday(undefined));
+        console.log('formatWithWeekday(): ', formatWithWeekday());
+
+        // isValidDate
+        let date = new Date(2022, 28, 10);
+        let invalidDate = new Date(undefined);
+        console.log('isValidDate(date): ', isValidDate(date)); // true
+        console.log('isValidDate(invalidDate): ', isValidDate(invalidDate)); // false
+        console.log('isValidDate(null): ', isValidDate(null)); // false
+        console.log('isValidDate(undefined): ', isValidDate(undefined)); // false
+        console.log('isValidDate({}): ', isValidDate({})); // false
+        console.log('isValidDate(3333): ', isValidDate(3333)); // false
+        console.log('isValidDate(""): ', isValidDate('')); // false
+        console.log('isValidDate([]): ', isValidDate([])); // false
+
+        // isAfter
+        let date1 = new Date(2022, 22, 10);
+        let date2 = new Date(2022, 23, 10);
+
+        console.log('isAfter(date1, date2): ', isAfter(date1, date2)); // false
+        console.log('isAfter(date2, date1): ', isAfter(date2, date1)); // true
+        console.log('isAfter(date1, new Date(undefined)): ', isAfter(date1, new Date(undefined))); // false
+
+        // formatDistanceToNow
+        console.log('formatDistanceToNow(new Date(new Date() - 10)): ', formatDistanceToNow(new Date(new Date() - 10))); // 'less than a minute'
+        console.log('formatDistanceToNow(new Date(new Date() - 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 60 * 1000))); // '1 minute'
+        console.log('formatDistanceToNow(new Date(new Date() - 31 * 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 31 * 60 * 1000))); // '31 minutes'
+        console.log('formatDistanceToNow(new Date(new Date() - 77 * 60 * 1000)): ', formatDistanceToNow(new Date(new Date() - 77 * 60 * 1000))); // 'about 1 hour'
+
+        console.log('formatDistanceToNow(new Date(2012, 6, 28, 9, 7, 32)): ', formatDistanceToNow(new Date(2012, 6, 28, 9, 7, 32))); // '28.07.2016 09:07:32'
+
+        console.log('formatDistanceToNow(null)): ', formatDistanceToNow(null)); // 'Date is unknown'
+        console.log('formatDistanceToNow()): ', formatDistanceToNow()); // 'Date is unknown'
+    </script>
+</body>
+
+</html>
