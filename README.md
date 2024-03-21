@@ -1,4 +1,4 @@
-# epam-JavaScript-Lessons
+# epam-javascript-Lessons
 Here I will place lessons from EPAM Front-End course (basic and advanced level)
 
 Here some of them:
